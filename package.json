@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/dar5hak/bub/issues"
   },
-  "homepage": "https://github.com/dar5hak/bub#readme"
+  "homepage": "https://github.com/dar5hak/bub#readme",
+  "dependencies": {
+    "hopjs-request": "^3.0.0"
+  }
 }
