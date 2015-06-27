@@ -8,7 +8,7 @@ exports.getMe = function () {
   // body
 }
 
-exports.endMessage = function () {
+exports.sendMessage = function () {
   // body
 }
 
@@ -16,31 +16,31 @@ exports.forwardMessage = function () {
   // body
 }
 
-exports.endPhoto = function () {
+exports.sendPhoto = function () {
   // body
 }
 
-exports.endAudio = function () {
+exports.sendAudio = function () {
   // body
 }
 
-exports.endDocument = function () {
+exports.sendDocument = function () {
   // body
 }
 
-exports.endSticker = function () {
+exports.sendSticker = function () {
   // body
 }
 
-exports.endVideo = function () {
+exports.sendVideo = function () {
   // body
 }
 
-exports.endLocation = function () {
+exports.sendLocation = function () {
   // body
 }
 
-exports.endChatAction = function () {
+exports.sendChatAction = function () {
   // body
 }
 
@@ -52,7 +52,7 @@ exports.getUpdates = function () {
   // body
 }
 
-exports.etWebhook = function () {
+exports.setWebhook = function () {
   // body
 }
 
