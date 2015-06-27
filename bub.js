@@ -45,7 +45,7 @@ exports.forwardMessage = function (chat_id, from_chat_id, message_id, callback) 
 exports.sendPhoto = function (chat_id, photo, caption, reply_to_message_id, reply_markup, callback) {
   sendRequest({
     url: baseUrl + '/sendPhoto',
-    form: {
+    formData: {
       chat_id: chat_id,
       photo: photo,
       caption: caption,
@@ -58,7 +58,7 @@ exports.sendPhoto = function (chat_id, photo, caption, reply_to_message_id, repl
 exports.sendAudio = function (chat_id, audio, reply_to_message_id, reply_markup, callback) {
   sendRequest({
     url: baseUrl + '/sendAudio',
-    form: {
+    formData: {
       chat_id: chat_id,
       audio: audio,
       reply_to_message_id: reply_to_message_id,
@@ -70,7 +70,7 @@ exports.sendAudio = function (chat_id, audio, reply_to_message_id, reply_markup,
 exports.sendDocument = function (chat_id, document, reply_to_message_id, reply_markup, callback) {
   sendRequest({
     url: baseUrl + '/sendDocument',
-    form: {
+    formData: {
       chat_id: chat_id,
       document: document,
       reply_to_message_id: reply_to_message_id,
@@ -82,7 +82,7 @@ exports.sendDocument = function (chat_id, document, reply_to_message_id, reply_m
 exports.sendSticker = function (chat_id, sticker, reply_to_message_id, reply_markup, callback) {
   sendRequest({
     url: baseUrl + '/sendSticker',
-    form: {
+    formData: {
       chat_id: chat_id,
       sticker: sticker,
       reply_to_message_id: reply_to_message_id,
@@ -94,7 +94,7 @@ exports.sendSticker = function (chat_id, sticker, reply_to_message_id, reply_mar
 exports.sendVideo = function (chat_id, video, reply_to_message_id, reply_markup, callback) {
   sendRequest({
     url: baseUrl + '/sendVideo',
-    form: {
+    formData: {
       chat_id: chat_id,
       video: video,
       reply_to_message_id: reply_to_message_id,
