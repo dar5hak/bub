@@ -4,9 +4,10 @@ var request = require('hopjs-request');
 var config = require('../../bub.json'); //FIXME: Remove hardcode
 
 var baseUrl = 'https://api.telegram.org/bot' + config.token;
-var pollTimeout = config.timeout ? config.timeout : 3600;
+var pollTimeout = config.timeout ? config.timeout : 86400;
 var offset = null;
 
+// List of handler methods specified by the user
 var callbacks = {};
 exports.on = function (command, callback) {
   if (callback) {
@@ -15,13 +16,17 @@ exports.on = function (command, callback) {
   }
 };
 
+// Start checking for updates
 exports.init = function (update_id) {
-  thid.update_id = update_id ? update_id : offset;
+  // Allow a custom update_id
+  if (update_id) offset = update_id;
+  // If there are updates, handle them
   exports.getUpdates(offset, null, pollTimeout, handleUpdates);
 };
 
 function handleUpdates(body) {
   body.result.forEach(function (result, index, results) {
+    // Handle text messages
     if (result.message.text) {
       var command = result.message.text.split(' ')[0];
       if (callbacks[command]) callbacks[command](result);
@@ -29,10 +34,14 @@ function handleUpdates(body) {
       else console.error('ERROR: No method to handle this message:\n' + result);
     }
     // TODO: Handle _joinGroup and similar messages
-    offset = result.update_id;
+    // Update offset
+    offset = result.update_id + 1;
   });
+  // Check again after handling updates
+  exports.init();
 }
 
+// Generic method to send HTTPS requests
 function sendRequest(params, callback) {
   request.post(params, function (err, res, body) {
     if (err) console.error(err);
@@ -40,6 +49,7 @@ function sendRequest(params, callback) {
   });
 }
 
+// API methods implemented in JavaScript
 exports.getMe = function (callback) {
   sendRequest({
     url: baseUrl + '/getMe',
@@ -176,4 +186,4 @@ exports.getUpdates = function (offset, limit, timeout, callback) {
   }, callback);
 };
 
-//exports.setWebhook = function () {};
+// exports.setWebhook = function () {};
