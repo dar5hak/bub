@@ -4,6 +4,34 @@ var request = require('hopjs-request');
 var config = require('../../bub.json'); //FIXME: Remove hardcode
 
 var baseUrl = 'https://api.telegram.org/bot' + config.token;
+var pollTimeout = config.timeout ? config.timeout : 3600;
+var offset = null;
+
+var callbacks = {};
+exports.on = function (command, callback) {
+  if (callback) {
+    if (command) callbacks[command] = callback;
+    else callbacks._default = callback;
+  }
+};
+
+exports.init = function (update_id) {
+  thid.update_id = update_id ? update_id : offset;
+  exports.getUpdates(offset, null, pollTimeout, handleUpdates);
+};
+
+function handleUpdates(body) {
+  body.result.forEach(function (result, index, results) {
+    if (result.message.text) {
+      var command = result.message.text.split(' ')[0];
+      if (callbacks[command]) callbacks[command](result);
+      else if (callbacks._default) callbacks._default(result);
+      else console.error('ERROR: No method to handle this message:\n' + result);
+    }
+    // TODO: Handle _joinGroup and similar messages
+    offset = result.update_id;
+  });
+}
 
 function sendRequest(params, callback) {
   request.post(params, function (err, res, body) {
@@ -149,5 +177,3 @@ exports.getUpdates = function (offset, limit, timeout, callback) {
 };
 
 //exports.setWebhook = function () {};
-//exports.on = function (command, callback) {};
-//exports.init = function () {};
