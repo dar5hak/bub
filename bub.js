@@ -6,7 +6,7 @@ var util = require('util');
 // Constructor for the whole darn thing
 var Bub = function (config) {
   var BASE_URL = 'https://api.telegram.org/bot' + config.token;
-  var TIMEOUT = config.timeout ? config.timeout : 86400;
+  var TIMEOUT = config.timeout ? config.timeout : 864000;
   var offset = null;
 
   // A reference to `this`, required for emitting events
