@@ -1,27 +1,23 @@
 var fs = require('fs');
 var path = require('path');
 var request = require('hopjs-request');
+var util = require('util');
 
-module.exports = function (config) {
-  var baseUrl = 'https://api.telegram.org/bot' + config.token;
-  var pollTimeout = config.timeout ? config.timeout : 86400;
+// Constructor for the whole darn thing
+var Bub = function (config) {
+  var BASE_URL = 'https://api.telegram.org/bot' + config.token;
+  var TIMEOUT = config.timeout ? config.timeout : 86400;
   var offset = null;
 
-  // List of handler methods specified by the user
-  var callbacks = {};
-  this.on = function (command, callback) {
-    if (callback) {
-      if (command) callbacks[command] = callback;
-      else callbacks._default = callback;
-    }
-  };
+  // A reference to `this`, required for emitting events
+  var self = this;
 
   // Start checking for updates
-  this.init = function (update_id) {
+  self.init = function (update_id) {
     // Allow a custom update_id
     if (update_id) offset = update_id;
     // If there are updates, handle them
-    this.getUpdates(offset, null, pollTimeout, handleUpdates);
+    self.getUpdates(offset, null, TIMEOUT, handleUpdates);
   };
 
   function handleUpdates(body) {
@@ -29,16 +25,16 @@ module.exports = function (config) {
       // Handle text messages
       if (result.message.text) {
         var command = result.message.text.split(' ')[0];
-        if (callbacks[command]) callbacks[command](result);
-        else if (callbacks._default) callbacks._default(result);
-        else console.error('ERROR: No method to handle this message:\n' + result);
+        var listeners = util.inspect(self.listeners(command));
+        if (listeners !== '[]') self.emit(command, result);
+        else self.emit('_default', result);
       }
       // TODO: Handle _joinGroup and similar messages
       // Update offset
       offset = result.update_id + 1;
     });
     // Check again after handling updates
-    this.init();
+    self.init();
   }
 
   // Generic method to send HTTPS requests
@@ -50,15 +46,15 @@ module.exports = function (config) {
   }
 
   // API methods implemented in JavaScript
-  this.getMe = function (callback) {
+  self.getMe = function (callback) {
     sendRequest({
-      url: baseUrl + '/getMe',
+      url: BASE_URL + '/getMe',
     }, callback);
   };
 
-  this.sendMessage = function (chat_id, text, disable_web_page_preview, reply_to_message_id, reply_markup, callback) {
+  self.sendMessage = function (chat_id, text, disable_web_page_preview, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendMessage',
+      url: BASE_URL + '/sendMessage',
       form: {
         chat_id: chat_id,
         text: text,
@@ -69,9 +65,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.forwardMessage = function (chat_id, from_chat_id, message_id, callback) {
+  self.forwardMessage = function (chat_id, from_chat_id, message_id, callback) {
     sendRequest({
-      url: baseUrl + '/forwardMessage',
+      url: BASE_URL + '/forwardMessage',
       form: {
         chat_id: chat_id,
         from_chat_id: from_chat_id,
@@ -80,9 +76,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendPhoto = function (chat_id, photo, caption, reply_to_message_id, reply_markup, callback) {
+  self.sendPhoto = function (chat_id, photo, caption, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendPhoto',
+      url: BASE_URL + '/sendPhoto',
       formData: {
         chat_id: chat_id,
         photo: photo,
@@ -93,9 +89,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendAudio = function (chat_id, audio, reply_to_message_id, reply_markup, callback) {
+  self.sendAudio = function (chat_id, audio, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendAudio',
+      url: BASE_URL + '/sendAudio',
       formData: {
         chat_id: chat_id,
         audio: audio,
@@ -105,9 +101,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendDocument = function (chat_id, document, reply_to_message_id, reply_markup, callback) {
+  self.sendDocument = function (chat_id, document, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendDocument',
+      url: BASE_URL + '/sendDocument',
       formData: {
         chat_id: chat_id,
         document: document,
@@ -117,9 +113,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendSticker = function (chat_id, sticker, reply_to_message_id, reply_markup, callback) {
+  self.sendSticker = function (chat_id, sticker, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendSticker',
+      url: BASE_URL + '/sendSticker',
       formData: {
         chat_id: chat_id,
         sticker: sticker,
@@ -129,9 +125,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendVideo = function (chat_id, video, reply_to_message_id, reply_markup, callback) {
+  self.sendVideo = function (chat_id, video, reply_to_message_id, reply_markup, callback) {
     sendRequest({
-      url: baseUrl + '/sendVideo',
+      url: BASE_URL + '/sendVideo',
       formData: {
         chat_id: chat_id,
         video: video,
@@ -141,9 +137,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendLocation = function (chat_id, latitude, longitude, reply_to_message_id, reply_markup) {
+  self.sendLocation = function (chat_id, latitude, longitude, reply_to_message_id, reply_markup) {
     sendRequest({
-      url: baseUrl + '/sendLocation',
+      url: BASE_URL + '/sendLocation',
       form: {
         chat_id: chat_id,
         latitude: latitude,
@@ -154,9 +150,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.sendChatAction = function (chat_id, action) {
+  self.sendChatAction = function (chat_id, action) {
     sendRequest({
-      url: baseUrl + '/sendChatAction',
+      url: BASE_URL + '/sendChatAction',
       form: {
         chat_id: chat_id,
         action: action
@@ -164,9 +160,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.getUserProfilePhotos = function (user_id, offset, limit, callback) {
+  self.getUserProfilePhotos = function (user_id, offset, limit, callback) {
     sendRequest({
-      url: baseUrl + '/getUserProfilePhotos',
+      url: BASE_URL + '/getUserProfilePhotos',
       form: {
         user_id: user_id,
         offset: offset,
@@ -175,9 +171,9 @@ module.exports = function (config) {
     }, callback);
   };
 
-  this.getUpdates = function (offset, limit, timeout, callback) {
+  self.getUpdates = function (offset, limit, timeout, callback) {
     sendRequest({
-      url: baseUrl + '/getUpdates',
+      url: BASE_URL + '/getUpdates',
       form: {
         offset: offset,
         limit: limit,
@@ -189,3 +185,7 @@ module.exports = function (config) {
   // this.setWebhook = function () {};
   return this;
 };
+
+util.inherits(Bub, require('events').EventEmitter);
+
+module.exports = Bub;
