@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Darshak Parikh
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,10 @@ var Bub = function (config) {
     // Allow a custom update_id
     if (update_id) offset = update_id;
     // If there are updates, handle them
-    self.getUpdates(offset, null, TIMEOUT, handleUpdates);
+    self.getUpdates({
+      offset: offset,
+      timeout: TIMEOUT
+    }, handleUpdates);
   };
 
   function handleUpdates(body) {
@@ -62,143 +65,150 @@ var Bub = function (config) {
   }
 
   // API methods implemented in JavaScript
+
+  /**
+   * Get info about the bot
+   * @param  {Function} callback Callback function
+   */
   self.getMe = function (callback) {
     sendRequest({
       url: BASE_URL + '/getMe',
     }, callback);
   };
 
-  self.sendMessage = function (chat_id, text, disable_web_page_preview, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send a text message
+   * @param  {Object}   params   {chat_id, text, disable_web_page_preview, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendMessage = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendMessage',
-      form: {
-        chat_id: chat_id,
-        text: text,
-        disable_web_page_preview: disable_web_page_preview,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      form: params
     }, callback);
   };
 
-  self.forwardMessage = function (chat_id, from_chat_id, message_id, callback) {
+  /**
+   * Forward a received message
+   * @param  {Object}   params   {chat_id, from_chat_id, message_id}
+   * @param  {Function} callback Callback function
+   */
+  self.forwardMessage = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/forwardMessage',
-      form: {
-        chat_id: chat_id,
-        from_chat_id: from_chat_id,
-        message_id: message_id
-      }
+      form: params
     }, callback);
   };
 
-  self.sendPhoto = function (chat_id, photo, caption, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send a photo
+   * @param  {Object}   params   {chat_id, photo, caption, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendPhoto = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendPhoto',
-      formData: {
-        chat_id: chat_id,
-        photo: photo,
-        caption: caption,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      formData: params
     }, callback);
   };
 
-  self.sendAudio = function (chat_id, audio, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send an audio
+   * @param  {Object}   params   {chat_id, audio, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendAudio = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendAudio',
-      formData: {
-        chat_id: chat_id,
-        audio: audio,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      formData: params
     }, callback);
   };
 
-  self.sendDocument = function (chat_id, document, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send an arbitrary file
+   * @param  {Object}   params   {chat_id, document, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendDocument = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendDocument',
-      formData: {
-        chat_id: chat_id,
-        document: document,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      formData: params
     }, callback);
   };
 
-  self.sendSticker = function (chat_id, sticker, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send a sticker
+   * @param  {Object}   param    {chat_id, sticker, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendSticker = function (param, callback) {
     sendRequest({
       url: BASE_URL + '/sendSticker',
-      formData: {
-        chat_id: chat_id,
-        sticker: sticker,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      formData: params
     }, callback);
   };
 
-  self.sendVideo = function (chat_id, video, reply_to_message_id, reply_markup, callback) {
+  /**
+   * Send a video
+   * @param  {Object}   params   {chat_id, video, reply_to_message_id, reply_markup}
+   * @param  {Function} callback Callback function
+   */
+  self.sendVideo = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendVideo',
-      formData: {
-        chat_id: chat_id,
-        video: video,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      formData: params
     }, callback);
   };
 
-  self.sendLocation = function (chat_id, latitude, longitude, reply_to_message_id, reply_markup) {
+  /**
+   * Send a geographic location
+   * @param  {Object}   params   {chat_id, latitude, longitude, reply_to_message_id}
+   * @param  {Function} callback Callback function
+   */
+  self.sendLocation = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendLocation',
-      form: {
-        chat_id: chat_id,
-        latitude: latitude,
-        longitude: longitude,
-        reply_to_message_id: reply_to_message_id,
-        reply_markup: reply_markup
-      }
+      form: params
     }, callback);
   };
 
-  self.sendChatAction = function (chat_id, action) {
+  /**
+   * Display a chat action
+   * @param  {Object}   params   {chat_id, action}
+   * @param  {Function} callback Callback function
+   */
+  self.sendChatAction = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendChatAction',
-      form: {
-        chat_id: chat_id,
-        action: action
-      }
+      form: params
     }, callback);
   };
 
-  self.getUserProfilePhotos = function (user_id, offset, limit, callback) {
+  /**
+   * Get a list of a user's profile photos
+   * @param  {Object}   params   {user_id, offset, limit}
+   * @param  {Function} callback Callback function
+   */
+  self.getUserProfilePhotos = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/getUserProfilePhotos',
-      form: {
-        user_id: user_id,
-        offset: offset,
-        limit: limit
-      }
+      form: params
     }, callback);
   };
 
-  self.getUpdates = function (offset, limit, timeout, callback) {
+  /**
+   * Get new messages
+   * @param  {Object}   params   {offset, limit, timeout}
+   * @param  {Function} callback Callback function
+   */
+  self.getUpdates = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/getUpdates',
-      form: {
-        offset: offset,
-        limit: limit,
-        timeout: timeout
-      }
+      form: params
     }, callback);
   };
 
-  // this.setWebhook = function () {};
+  // self.setWebhook = function () {};
   return this;
 };
 
