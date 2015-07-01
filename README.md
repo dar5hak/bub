@@ -23,14 +23,24 @@ I recommend that you store your config (which contains the API token) in a separ
 If your bot doesn't receive any messages for `timeout` number of seconds, it will stop checking for more. Default is 10 days.
 
 ## Usage
-You can use the Telegram API methods as JavaScript functions. All arguments are in the same order as specified in the API. There is an additional callback argument, which you can use for your own functionality.
+You can use the Telegram API methods as JavaScript functions. All arguments specified in the API can be passed via an object in the first parameter. The second argument is a callback, which you can use for your own functionality.
 
 ```javascript
 var config = require('./bub.json');
 var Bub = require('bub');
 var bot = new Bub(config);
 
+// No parameters for getMe
 bot.getMe(function (body) {
+  console.log('Received object:');
+  console.log(body);
+});
+
+// For sendChatAction, parameters go into the first argument
+bot.sendChatAction({
+  chat_id: 123456789,
+  action: typing
+}, function (body) {
   console.log('Received object:');
   console.log(body);
 });
