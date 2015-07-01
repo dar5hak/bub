@@ -1,5 +1,5 @@
 # bub
-A framework to build Telegram bots with Node
+A framework for building Telegram bots with Node.
 
 Currently in early stages.
 
@@ -11,9 +11,8 @@ $ npm install bub --save
 ```
 
 ## Configuration
-I recommend that you store your config (which contains the API token) in a separate JSON file. That way, if you want to share your code, you can simply omit the file.
+I recommend that you store your config (which contains the API token) in a separate JSON file, say `bub.json`. That way, if you want to share your code, you can simply omit the file.
 
-`bub.json`
 ```json
 {
   "token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
