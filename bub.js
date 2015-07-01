@@ -49,6 +49,12 @@ var Bub = function (config) {
         else self.emit('_default', result);
       }
       // TODO: Handle _joinGroup and similar messages
+      result.quickSend = function (content) {
+        var message = {
+          chat_id: result.message.chat.id
+        };
+        // TODO: Parse content and call respective method
+      };
       // Update offset
       offset = result.update_id + 1;
     });
