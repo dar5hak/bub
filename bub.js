@@ -41,6 +41,7 @@ var Bub = function (config) {
 
   function handleUpdates(body) {
     body.result.forEach(function (result, index, results) {
+      result.respond = respond;
       // Handle text messages
       if (result.message.text) {
         var command = result.message.text.split(' ')[0];
@@ -49,14 +50,16 @@ var Bub = function (config) {
         else self.emit('_default', result);
       }
       // TODO: Handle _joinGroup and similar messages
-      result.quickSend = function (content) {
-        var message = {
-          chat_id: result.message.chat.id
-        };
-        // TODO: Parse content and call respective method
-      };
       // Update offset
       offset = result.update_id + 1;
+
+      function respond(content) {
+        var message = {};
+        message.chat_id = result.message.chat.id;
+        message.text = content;
+        self.sendMessage(message);
+        // TODO: Parse content and call respective method
+      }
     });
     // Check again after handling updates
     self.init();
