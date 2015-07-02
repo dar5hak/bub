@@ -147,7 +147,7 @@ var Bub = function (config) {
    * @param  {Object}   param    {chat_id, sticker, reply_to_message_id, reply_markup}
    * @param  {Function} callback Callback function
    */
-  self.sendSticker = function (param, callback) {
+  self.sendSticker = function (params, callback) {
     sendRequest({
       url: BASE_URL + '/sendSticker',
       formData: params
