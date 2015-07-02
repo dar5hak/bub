@@ -43,7 +43,7 @@ bot.on('/longstory', function (result) {
     console.log('Received object:');
     console.log(body);
   });
-})
+});
 
 // Anything without handlers goes here
 bot.on('_default', console.log);
@@ -54,6 +54,6 @@ bot.init();
 
 ## Roadmap
 - [x] Add a convenience method `respond()` for quick responses
-- [ ] Improve `respond()` to send any kind of message based on the argument
+- [ ] Improve `respond()` to send any kind of message based on the argument, e.g. URL to a png sends a photo
 - [ ] Add webhook support
-- [ ] Somewhere down the road: integrate a proper test framework and manage it with gulp
+- [ ] Somewhere down the road: integrate a proper test framework and manage it with Gulp
