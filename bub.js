@@ -14,45 +14,23 @@
  * limitations under the License.
  */
 
-var fs = require('fs');
-var path = require('path');
-var request = require('hopjs-request');
-var util = require('util');
+
+
+var request = require("hopjs-request");
+var util = require("util");
 
 // Constructor for the whole darn thing
 var Bub = function (config) {
-  var BASE_URL = 'https://api.telegram.org/bot' + config.token;
+  "use strict";
+  var BASE_URL = "https://api.telegram.org/bot" + config.token;
   var TIMEOUT = config.timeout ? config.timeout : 864000;
   var offset = null;
 
   // A reference to `this`, required for emitting events
   var self = this;
 
-  // Start checking for updates
-  self.init = function (update_id) {
-    // Allow a custom update_id
-    if (update_id) offset = update_id;
-    // If there are updates, handle them
-    self.getUpdates({
-      offset: offset,
-      timeout: TIMEOUT
-    }, handleUpdates);
-  };
-
   function handleUpdates(body) {
-    body.result.forEach(function (result, index, results) {
-      result.respond = respond;
-      // Handle text messages
-      if (result.message.text) {
-        var command = result.message.text.split(' ')[0];
-        var listeners = util.inspect(self.listeners(command));
-        if (listeners !== '[]') self.emit(command, result);
-        else self.emit('_default', result);
-      }
-      // TODO: Handle _joinGroup and similar messages
-      // Update offset
-      offset = result.update_id + 1;
-
+    body.result.forEach(function (result) {
       function respond(content) {
         var message = {};
         message.chat_id = result.message.chat.id;
@@ -60,6 +38,21 @@ var Bub = function (config) {
         self.sendMessage(message);
         // TODO: Parse content and call respective method
       }
+
+      result.respond = respond;
+      // Handle text messages
+      if (result.message.text) {
+        var command = result.message.text.split(" ")[0];
+        var listeners = util.inspect(self.listeners(command));
+        if (listeners !== "[]") {
+          self.emit(command, result);
+        } else {
+          self.emit("_default", result);
+        }
+      }
+      // TODO: Handle _joinGroup and similar messages
+      // Update offset
+      offset = result.update_id + 1;
     });
     // Check again after handling updates
     self.init();
@@ -68,20 +61,36 @@ var Bub = function (config) {
   // Generic method to send HTTPS requests
   function sendRequest(params, callback) {
     request.post(params, function (err, res, body) {
-      if (err) console.error(err);
-      if (callback) callback(JSON.parse(body));
+      if (err) {
+        console.error(err);
+      }
+      if (callback) {
+        callback(JSON.parse(body));
+      }
     });
   }
 
-  // API methods implemented in JavaScript
+  // Start checking for updates
+  self.init = function (update_id) {
+    // Allow a custom update_id
+    if (update_id) {
+      offset = update_id;
+    }
+    // If there are updates, handle them
+    self.getUpdates({
+      offset: offset,
+      timeout: TIMEOUT
+    }, handleUpdates);
+  };
 
+  // API methods implemented in JavaScript
   /**
    * Get info about the bot
    * @param  {Function} callback Callback function
    */
   self.getMe = function (callback) {
     sendRequest({
-      url: BASE_URL + '/getMe',
+      url: BASE_URL + "/getMe"
     }, callback);
   };
 
@@ -92,7 +101,7 @@ var Bub = function (config) {
    */
   self.sendMessage = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendMessage',
+      url: BASE_URL + "/sendMessage",
       form: params
     }, callback);
   };
@@ -104,7 +113,7 @@ var Bub = function (config) {
    */
   self.forwardMessage = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/forwardMessage',
+      url: BASE_URL + "/forwardMessage",
       form: params
     }, callback);
   };
@@ -116,7 +125,7 @@ var Bub = function (config) {
    */
   self.sendPhoto = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendPhoto',
+      url: BASE_URL + "/sendPhoto",
       formData: params
     }, callback);
   };
@@ -128,7 +137,7 @@ var Bub = function (config) {
    */
   self.sendAudio = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendAudio',
+      url: BASE_URL + "/sendAudio",
       formData: params
     }, callback);
   };
@@ -140,7 +149,7 @@ var Bub = function (config) {
    */
   self.sendDocument = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendDocument',
+      url: BASE_URL + "/sendDocument",
       formData: params
     }, callback);
   };
@@ -152,7 +161,7 @@ var Bub = function (config) {
    */
   self.sendSticker = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendSticker',
+      url: BASE_URL + "/sendSticker",
       formData: params
     }, callback);
   };
@@ -164,7 +173,7 @@ var Bub = function (config) {
    */
   self.sendVideo = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendVideo',
+      url: BASE_URL + "/sendVideo",
       formData: params
     }, callback);
   };
@@ -176,7 +185,7 @@ var Bub = function (config) {
    */
   self.sendLocation = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendLocation',
+      url: BASE_URL + "/sendLocation",
       form: params
     }, callback);
   };
@@ -188,19 +197,19 @@ var Bub = function (config) {
    */
   self.sendChatAction = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/sendChatAction',
+      url: BASE_URL + "/sendChatAction",
       form: params
     }, callback);
   };
 
   /**
-   * Get a list of a user's profile photos
+   * Get a list of a user"s profile photos
    * @param  {Object}   params   {user_id, offset, limit}
    * @param  {Function} callback Callback function
    */
   self.getUserProfilePhotos = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/getUserProfilePhotos',
+      url: BASE_URL + "/getUserProfilePhotos",
       form: params
     }, callback);
   };
@@ -212,7 +221,7 @@ var Bub = function (config) {
    */
   self.getUpdates = function (params, callback) {
     sendRequest({
-      url: BASE_URL + '/getUpdates',
+      url: BASE_URL + "/getUpdates",
       form: params
     }, callback);
   };
@@ -221,6 +230,7 @@ var Bub = function (config) {
   return this;
 };
 
-util.inherits(Bub, require('events').EventEmitter);
+util.inherits(Bub, require("events")
+  .EventEmitter);
 
 module.exports = Bub;

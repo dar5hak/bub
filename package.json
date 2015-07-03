@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/dar5hak/bub#readme",
   "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^0.15.0",
     "hopjs-request": "^3.0.0"
   }
 }
