@@ -1,5 +1,5 @@
 # bub
-A framework for building Telegram bots with Node.
+Telegram bot framework
 
 Please go through the [Telegram Bot API](https://core.telegram.org/bots/api) first.
 
