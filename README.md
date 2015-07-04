@@ -10,7 +10,7 @@ npm install bub --save
 ```
 
 ## Set
-I recommend that you store your config (which contains the API token) in a separate JSON file, say `bub.json`. That way, if you want to share your code, you can simply omit the file.
+Try and keep your config in a separate JSON file, say `bub.json`. That way, you can share your code without sharing your API token.
 
 ```json
 {

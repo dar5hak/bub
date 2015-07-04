@@ -16,14 +16,19 @@
 
 
 
-var request = require("hopjs-request");
+var existsFile = require("exists-file");
+var fs = require("fs");
+var mime = require("mime");
+var path = require("path");
+var request = require("request");
+var untildify = require("untildify");
 var util = require("util");
 
 // Constructor for the whole darn thing
 var Bub = function (config) {
   "use strict";
   var BASE_URL = "https://api.telegram.org/bot" + config.token;
-  var TIMEOUT = config.timeout ? config.timeout : 864000;
+  var TIMEOUT = config.timeout || 864000;
   var offset = null;
 
   // A reference to `this`, required for emitting events
@@ -31,15 +36,26 @@ var Bub = function (config) {
 
   function handleUpdates(body) {
     body.result.forEach(function (result) {
-      function respond(content) {
+      // Convenience method for quick responses
+      result.respond = function (content) {
         var message = {};
         message.chat_id = result.message.chat.id;
-        message.text = content;
-        self.sendMessage(message);
-        // TODO: Parse content and call respective method
-      }
 
-      result.respond = respond;
+        var contentPath = path.resolve(untildify(content));
+        if (existsFile(contentPath)) {
+          var mimeType = mime.lookup(contentPath);
+          if (mimeType === "image/jpeg" || mimeType === "image/png" || mimeType === "image/gif") {
+            console.log(contentPath);
+            message.photo = fs.createReadStream(contentPath);
+            self.sendPhoto(message, console.log);
+          }
+        } else {
+          message.text = content;
+          self.sendMessage(message);
+        }
+        // TODO: Parse content and call respective method
+      };
+
       // Handle text messages
       if (result.message.text) {
         var command = result.message.text.split(" ")[0];

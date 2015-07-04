@@ -24,7 +24,10 @@
   },
   "homepage": "https://github.com/dar5hak/bub#readme",
   "dependencies": {
-    "hopjs-request": "^3.0.0"
+    "exists-file": "^1.0.0",
+    "mime": "^1.3.4",
+    "request": "^2.58.0",
+    "untildify": "^2.1.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
