@@ -16,13 +16,12 @@
 
 
 
-var path = require("path");
 var gulp = require("gulp");
 var eslint = require("gulp-eslint");
 
 gulp.task("eslint", function () {
   "use strict";
-  return gulp.src(path.join(__dirname, "*.js"))
+  return gulp.src(["*.js", "src/**/*.js"])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError());

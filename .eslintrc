@@ -3,6 +3,7 @@
     "node": true
   },
   "rules": {
-    "camelcase": 0
+    "camelcase": 0,
+    "quotes": [2, "single"]
   }
 }
