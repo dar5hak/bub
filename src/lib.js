@@ -1,6 +1,7 @@
 var magic = require('stream-mmmagic');
 var request = require('request');
 var types = require('./types.json');
+var _ = require('lodash');
 
 /**
  * Get the type of message based on contents
@@ -18,11 +19,11 @@ exports.getMessageType = function (content, callback) {
       if (err) {
         console.log(err);
       }
-      if (types.image.indexOf(mime.type) !== -1) {
+      if (_.contains(types.image, mime.type)) {
         callback('image');
-      } else if (types.audio.indexOf(mime.type) !== -1) {
+      } else if (_.contains(types.audio, mime.type)) {
         callback('audio');
-      } else if (types.video.indexOf(mime.type) !== -1) {
+      } else if (_.contains(types.video, mime.type)) {
         callback('video');
       } else {
         callback('document');
@@ -40,9 +41,6 @@ exports.getMessageType = function (content, callback) {
  */
 exports.sendRequest = function (params, callback) {
   'use strict';
-  if (params.formData) {
-    params.formData.photo.pipe(require('fs').createWriteStream('/home/darshak/CoDS1.jpg'));
-  }
   request.post(params, function (err, res, body) {
     if (err) {
       console.error(err);
