@@ -31,8 +31,10 @@ var _ = require('lodash');
 exports.getMessageType = function (content, callback) {
   'use strict';
   if (isStream.readable(content)) {
-    var contentCopy = new stream.Duplex();
+    // Hack to keep `magic` from ruining the stream
+    var contentCopy = new stream.PassThrough();
     content.pipe(contentCopy);
+
     magic(contentCopy, function (err, mime) {
       if (err) {
         console.log(err);
