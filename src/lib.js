@@ -19,7 +19,6 @@
 var isStream = require('is-stream');
 var magic = require('stream-mmmagic');
 var request = require('request');
-var stream = require('stream');
 var types = require('./types.json');
 var _ = require('lodash');
 
@@ -31,11 +30,7 @@ var _ = require('lodash');
 exports.getMessageType = function (content, callback) {
   'use strict';
   if (isStream.readable(content)) {
-    // Hack to keep `magic` from ruining the stream
-    var contentCopy = new stream.PassThrough();
-    content.pipe(contentCopy);
-
-    magic(contentCopy, function (err, mime) {
+    magic(content, function (err, mime) {
       if (err) {
         console.log(err);
       }
