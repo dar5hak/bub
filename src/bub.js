@@ -36,6 +36,7 @@ var Bub = function (config) {
         var message = {};
         message.chat_id = result.message.chat.id;
         lib.getMessageType(content, function (type) {
+          console.log(type);
           if (type === 'image') {
             message.photo = content;
             self.sendPhoto(message, console.log);

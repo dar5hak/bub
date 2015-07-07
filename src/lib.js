@@ -1,5 +1,7 @@
+var isStream = require('is-stream');
 var magic = require('stream-mmmagic');
 var request = require('request');
+var stream = require('stream');
 var types = require('./types.json');
 var _ = require('lodash');
 
@@ -10,12 +12,10 @@ var _ = require('lodash');
  */
 exports.getMessageType = function (content, callback) {
   'use strict';
-  var isAStream =
-    typeof content.on === 'function' &&
-    typeof content.read === 'function' &&
-    typeof content.pipe === 'function';
-  if (isAStream) {
-    magic(content, function (err, mime) {
+  if (isStream.readable(content)) {
+    var contentCopy = new stream.Duplex();
+    content.pipe(contentCopy);
+    magic(contentCopy, function (err, mime) {
       if (err) {
         console.log(err);
       }
@@ -29,8 +29,10 @@ exports.getMessageType = function (content, callback) {
         callback('document');
       }
     });
-  } else {
+  } else if (_.isString(contentCopy)) {
     callback('text');
+  } else {
+    console.error('Couldn\'t determine type of content. Please pass a string or a readable stream.');
   }
 };
 

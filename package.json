@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/dar5hak/bub#readme",
   "dependencies": {
+    "is-stream": "^1.0.1",
     "lodash": "^3.10.0",
     "request": "^2.58.0",
     "stream-mmmagic": "^0.3.0"
