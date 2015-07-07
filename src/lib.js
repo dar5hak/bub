@@ -49,7 +49,7 @@ exports.getMessageType = function (content, callback) {
         callback('document');
       }
     });
-  } else if (_.isString(contentCopy)) {
+  } else if (_.isString(content)) {
     callback('text');
   } else {
     console.error('Couldn\'t determine type of content. Please pass a string or a readable stream.');
