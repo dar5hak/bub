@@ -53,7 +53,7 @@ bot.init();
 
 ## Roadmap
 - [x] Add a convenience method `respond()` for quick responses
-- [ ] Improve `respond()` to send any kind of message based on the argument, e.g. URL to a png sends a photo
+- [ ] Improve `respond()` to send any kind of message based on the argument
 - [x] Integrate Gulp and ESLint
 - [ ] Add webhook support
 - [ ] Somewhere down the road: integrate a proper test framework and manage it with Gulp
