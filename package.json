@@ -1,6 +1,6 @@
 {
   "name": "bub",
-  "version": "0.5.0-0",
+  "version": "0.5.0",
   "description": "A framework to build Telegram bots with Node",
   "main": "src/bub.js",
   "scripts": {
