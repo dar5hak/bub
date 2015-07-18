@@ -28,10 +28,14 @@ var config = require('./bub.json');
 var Bub = require('bub');
 var bot = new Bub(config);
 
+var fs = require('fs');
+
 // User commands are handled with `on()`
 bot.on('/start', function (result) {
   // Quick responses are easy-peasy
   result.respond('Hello, ' + result.message.from.first_name);
+  // Shoot a stream for photos, audio and video
+  result.respond(fs.createReadStream('/home/me/image.png'));
 });
 
 bot.on('/longstory', function (result) {
