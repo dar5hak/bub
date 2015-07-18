@@ -75,16 +75,13 @@ var Bub = function (config) {
             console.error(err);
           }
           if (responses.every(function (response) {
-            return !response.ok;
-          })) {
+              return !response.ok;
+            })) {
             var message = {
               chat_id: result.message.chat.id,
               document: content
             };
-            console.log('doc confirmed');
-            self.sendDocument(message, function (response) {
-              console.log('response received', response);
-            });
+            self.sendDocument(message);
           }
         });
       };

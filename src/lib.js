@@ -47,7 +47,9 @@ exports.getMessageType = function (content, callback) {
   } else if (_.isString(content)) {
     callback('text');
   } else {
-    console.error('Couldn\'t determine type of content. Please pass a string or a readable stream.');
+    console.error(
+      'Couldn\'t determine type of content. Please pass a string or a readable stream.'
+    );
   }
 };
 
@@ -62,7 +64,6 @@ exports.sendRequest = function (params, callback) {
     if (err) {
       console.error(err);
     }
-    console.log(params, body);
     if (callback) {
       callback(JSON.parse(body));
     }
