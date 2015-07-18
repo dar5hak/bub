@@ -35,7 +35,7 @@ var Bub = function (config) {
     body.result.forEach(function (result) {
       // Convenience method for quick responses
       result.respond = function (content) {
-        if (content.isString) {
+        if (Object.isString(content)) {
           self.sendMessage({
             chat_id: result.message.chat.id,
             text: content
