@@ -16,10 +16,10 @@
 
 
 
-require('sugar');
 var async = require('async');
 var lib = require('./lib');
 var util = require('util');
+var _ = require('lodash');
 
 // Constructor for the whole darn thing
 var Bub = function (config) {
@@ -35,7 +35,7 @@ var Bub = function (config) {
     body.result.forEach(function (result) {
       // Convenience method for quick responses
       result.respond = function (content) {
-        if (Object.isString(content)) {
+        if (_.isString(content)) {
           self.sendMessage({
             chat_id: result.message.chat.id,
             text: content
@@ -74,9 +74,7 @@ var Bub = function (config) {
           if (err) {
             console.error(err);
           }
-          if (responses.every(function (response) {
-              return !response.ok;
-            })) {
+          if (_.every(responses, 'ok', false)) {
             var message = {
               chat_id: result.message.chat.id,
               document: content
