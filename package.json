@@ -1,7 +1,7 @@
 {
   "name": "bub",
   "version": "0.5.1",
-  "description": "A framework to build Telegram bots with Node",
+  "description": "Telegram bot framework",
   "main": "src/bub.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
