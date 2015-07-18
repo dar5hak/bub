@@ -16,6 +16,8 @@
 
 
 
+require('sugar');
+var async = require('async');
 var lib = require('./lib');
 var util = require('util');
 
@@ -33,24 +35,56 @@ var Bub = function (config) {
     body.result.forEach(function (result) {
       // Convenience method for quick responses
       result.respond = function (content) {
-        var message = {};
-        message.chat_id = result.message.chat.id;
-        lib.getMessageType(content, function (type) {
-          if (type === 'image') {
-            message.photo = content;
-            self.sendPhoto(message, console.log);
-          } else if (type === 'audio') {
-            message.audio = content;
-            self.sendAudio(message, console.log);
-          } else if (type === 'video') {
-            message.video = content;
-            self.sendVideo(message, console.log);
-          } else if (type === 'document') {
-            message.document = content;
-            self.sendDocument(message, console.log);
-          } else if (type === 'text') {
-            message.text = content;
-            self.sendMessage(message, console.log);
+        if (content.isString) {
+          self.sendMessage({
+            chat_id: result.message.chat.id,
+            text: content
+          });
+          return;
+        }
+        async.parallel([
+          function (callback) {
+            var message = {
+              chat_id: result.message.chat.id,
+              photo: content
+            };
+            self.sendPhoto(message, function (response) {
+              callback(null, response);
+            });
+          },
+          function (callback) {
+            var message = {
+              chat_id: result.message.chat.id,
+              audio: content
+            };
+            self.sendAudio(message, function (response) {
+              callback(null, response);
+            });
+          },
+          function (callback) {
+            var message = {
+              chat_id: result.message.chat.id,
+              video: content
+            };
+            self.sendVideo(message, function (response) {
+              callback(null, response);
+            });
+          }
+        ], function (err, responses) {
+          if (err) {
+            console.error(err);
+          }
+          if (responses.every(function (response) {
+            return !response.ok;
+          })) {
+            var message = {
+              chat_id: result.message.chat.id,
+              document: content
+            };
+            console.log('doc confirmed');
+            self.sendDocument(message, function (response) {
+              console.log('response received', response);
+            });
           }
         });
       };

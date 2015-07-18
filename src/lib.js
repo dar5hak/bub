@@ -62,6 +62,7 @@ exports.sendRequest = function (params, callback) {
     if (err) {
       console.error(err);
     }
+    console.log(params, body);
     if (callback) {
       callback(JSON.parse(body));
     }

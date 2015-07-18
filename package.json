@@ -24,10 +24,12 @@
   },
   "homepage": "https://github.com/dar5hak/bub#readme",
   "dependencies": {
+    "async": "^1.3.0",
     "is-stream": "^1.0.1",
     "lodash": "^3.10.0",
     "request": "^2.58.0",
-    "stream-mmmagic": "^0.3.0"
+    "stream-mmmagic": "^0.3.0",
+    "sugar": "^1.4.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
