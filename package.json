@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-eslint": "^0.15.0"
+    "gulp-eslint": "^0.15.0",
+    "request-debug": "^0.2.0"
   }
 }
