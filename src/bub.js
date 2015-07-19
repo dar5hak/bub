@@ -31,58 +31,58 @@ var Bub = function (config) {
   // A reference to `this`, required for emitting events
   var self = this;
 
+  function getRespond(id) {
+    return function (content) {
+      if (_.isString(content)) {
+        self.sendMessage({
+          chat_id: id,
+          text: content
+        });
+        return;
+      }
+      async.parallel([
+        function (callback) {
+          self.sendPhoto({
+            chat_id: id,
+            photo: content
+          }, function (response) {
+            callback(null, response);
+          });
+        },
+        function (callback) {
+          self.sendAudio({
+            chat_id: id,
+            audio: content
+          }, function (response) {
+            callback(null, response);
+          });
+        },
+        function (callback) {
+          self.sendVideo({
+            chat_id: id,
+            video: content
+          }, function (response) {
+            callback(null, response);
+          });
+        }
+      ], function (err, responses) {
+        if (err) {
+          console.error(err);
+        }
+        if (_.every(responses, 'ok', false)) {
+          self.sendDocument({
+            chat_id: id,
+            document: content
+          });
+        }
+      });
+    };
+  }
+
   function handleUpdates(body) {
     body.result.forEach(function (result) {
       // Convenience method for quick responses
-      result.respond = function (content) {
-        if (_.isString(content)) {
-          self.sendMessage({
-            chat_id: result.message.chat.id,
-            text: content
-          });
-          return;
-        }
-        async.parallel([
-          function (callback) {
-            var message = {
-              chat_id: result.message.chat.id,
-              photo: content
-            };
-            self.sendPhoto(message, function (response) {
-              callback(null, response);
-            });
-          },
-          function (callback) {
-            var message = {
-              chat_id: result.message.chat.id,
-              audio: content
-            };
-            self.sendAudio(message, function (response) {
-              callback(null, response);
-            });
-          },
-          function (callback) {
-            var message = {
-              chat_id: result.message.chat.id,
-              video: content
-            };
-            self.sendVideo(message, function (response) {
-              callback(null, response);
-            });
-          }
-        ], function (err, responses) {
-          if (err) {
-            console.error(err);
-          }
-          if (_.every(responses, 'ok', false)) {
-            var message = {
-              chat_id: result.message.chat.id,
-              document: content
-            };
-            self.sendDocument(message);
-          }
-        });
-      };
+      result.respond = getRespond(result.message.chat.id);
 
       // Handle text messages
       if (result.message.text) {
