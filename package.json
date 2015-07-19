@@ -1,6 +1,6 @@
 {
   "name": "bub",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Telegram bot framework",
   "main": "src/bub.js",
   "scripts": {
