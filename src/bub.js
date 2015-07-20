@@ -31,6 +31,14 @@ var Bub = function (config) {
   // A reference to `this`, required for emitting events
   var self = this;
 
+  var types = {
+    image: self.sendPhoto,
+    audio: self.sendAudio,
+    video: self.sendVideo,
+    document: self.sendDocument,
+    text: self.sendMessage
+  };
+
   function getRespond(id) {
     return function (content) {
       if (_.isString(content)) {
