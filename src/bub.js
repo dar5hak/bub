@@ -16,8 +16,10 @@
 
 
 
-var async = require('async');
+var isStream = require('is-stream');
 var lib = require('./lib');
+var mime = require('mime');
+var path = require('path');
 var util = require('util');
 var _ = require('lodash');
 
@@ -31,14 +33,20 @@ var Bub = function (config) {
   // A reference to `this`, required for emitting events
   var self = this;
 
-  var types = {
-    image: self.sendPhoto,
-    audio: self.sendAudio,
-    video: self.sendVideo,
-    document: self.sendDocument,
-    text: self.sendMessage
-  };
+  // What API method to use based on the mime type provided
+  function getAPIMethod(mimeType) {
+    if (_.startsWith(mimeType, 'image')) {
+      return self.sendPhoto;
+    } else if (_.startsWith(mimeType, 'audio')) {
+      return self.sendAudio;
+    } else if (_.startsWith(mimeType, 'video')) {
+      return self.sendVideo;
+    } else {
+      return self.sendDocument;
+    }
+  }
 
+  // Closure that returns a `respond()` function for each chat_id
   function getRespond(id) {
     return function (content) {
       if (_.isString(content)) {
@@ -47,43 +55,18 @@ var Bub = function (config) {
           text: content
         });
         return;
+      } else if (isStream.readable(content)) {
+        if (content.path) {
+          var contentPath = path.resolve(content.path);
+          var method = getAPIMethod(mime.lookup(contentPath));
+          method({
+            chat_id: id,
+            _media: content
+          });
+        }
+      } else {
+        console.error('The argument to `respond()` should be a string or a readable stream.');
       }
-      async.parallel([
-        function (callback) {
-          self.sendPhoto({
-            chat_id: id,
-            photo: content
-          }, function (response) {
-            callback(null, response);
-          });
-        },
-        function (callback) {
-          self.sendAudio({
-            chat_id: id,
-            audio: content
-          }, function (response) {
-            callback(null, response);
-          });
-        },
-        function (callback) {
-          self.sendVideo({
-            chat_id: id,
-            video: content
-          }, function (response) {
-            callback(null, response);
-          });
-        }
-      ], function (err, responses) {
-        if (err) {
-          console.error(err);
-        }
-        if (_.every(responses, 'ok', false)) {
-          self.sendDocument({
-            chat_id: id,
-            document: content
-          });
-        }
-      });
     };
   }
 
@@ -164,6 +147,10 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendPhoto = function (params, callback) {
+    if (params._media) {
+      params.photo = params._media;
+      delete params._media;
+    }
     lib.sendRequest({
       url: BASE_URL + '/sendPhoto',
       formData: params
@@ -176,6 +163,10 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendAudio = function (params, callback) {
+    if (params._media) {
+      params.audio = params._media;
+      delete params._media;
+    }
     lib.sendRequest({
       url: BASE_URL + '/sendAudio',
       formData: params
@@ -188,6 +179,10 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendDocument = function (params, callback) {
+    if (params._media) {
+      params.document = params._media;
+      delete params._media;
+    }
     lib.sendRequest({
       url: BASE_URL + '/sendDocument',
       formData: params
@@ -212,6 +207,10 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendVideo = function (params, callback) {
+    if (params._media) {
+      params.video = params._media;
+      delete params._media;
+    }
     lib.sendRequest({
       url: BASE_URL + '/sendVideo',
       formData: params
