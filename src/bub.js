@@ -17,9 +17,9 @@
 
 
 var isStream = require('is-stream');
-var lib = require('./lib');
 var mime = require('mime');
 var path = require('path');
+var request = require('request');
 var util = require('util');
 var _ = require('lodash');
 
@@ -65,7 +65,9 @@ var Bub = function (config) {
           });
         }
       } else {
-        console.error('The argument to `respond()` should be a string or a readable stream.');
+        console.error(
+          'The argument to `respond()` should be a string or a readable stream.'
+        );
       }
     };
   }
@@ -93,6 +95,17 @@ var Bub = function (config) {
     self.init();
   }
 
+  function sendRequest(params, callback) {
+    request.post(params, function (err, res, body) {
+      if (err) {
+        console.error(err);
+      }
+      if (callback) {
+        callback(JSON.parse(body));
+      }
+    });
+  }
+
   // Start checking for updates
   self.init = function (update_id) {
     // Allow a custom update_id
@@ -112,7 +125,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.getMe = function (callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/getMe'
     }, callback);
   };
@@ -123,7 +136,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendMessage = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendMessage',
       form: params
     }, callback);
@@ -135,7 +148,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.forwardMessage = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/forwardMessage',
       form: params
     }, callback);
@@ -151,7 +164,7 @@ var Bub = function (config) {
       params.photo = params._media;
       delete params._media;
     }
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendPhoto',
       formData: params
     }, callback);
@@ -167,7 +180,7 @@ var Bub = function (config) {
       params.audio = params._media;
       delete params._media;
     }
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendAudio',
       formData: params
     }, callback);
@@ -183,7 +196,7 @@ var Bub = function (config) {
       params.document = params._media;
       delete params._media;
     }
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendDocument',
       formData: params
     }, callback);
@@ -195,7 +208,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendSticker = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendSticker',
       formData: params
     }, callback);
@@ -211,7 +224,7 @@ var Bub = function (config) {
       params.video = params._media;
       delete params._media;
     }
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendVideo',
       formData: params
     }, callback);
@@ -223,7 +236,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendLocation = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendLocation',
       form: params
     }, callback);
@@ -235,7 +248,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.sendChatAction = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/sendChatAction',
       form: params
     }, callback);
@@ -247,7 +260,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.getUserProfilePhotos = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/getUserProfilePhotos',
       form: params
     }, callback);
@@ -259,7 +272,7 @@ var Bub = function (config) {
    * @param  {Function} callback Callback function
    */
   self.getUpdates = function (params, callback) {
-    lib.sendRequest({
+    sendRequest({
       url: BASE_URL + '/getUpdates',
       form: params
     }, callback);
