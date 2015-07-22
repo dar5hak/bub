@@ -42,7 +42,7 @@ bot.on('/longstory', function (result) {
   // Plain old API methods
   bot.sendChatAction({
     chat_id: 123456789,
-    action: typing
+    action: 'typing'
   }, function (body) {
     console.log('Typing…');
   });
