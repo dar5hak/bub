@@ -49,6 +49,7 @@ var Bub = function (config) {
   // Closure that returns a `respond()` function for each chat_id
   function getRespond(id) {
     return function (content) {
+      // Strings are text messsages, streams are media
       if (_.isString(content)) {
         self.sendMessage({
           chat_id: id,
@@ -59,6 +60,9 @@ var Bub = function (config) {
         if (content.path) {
           var contentPath = path.resolve(content.path);
           var method = getAPIMethod(mime.lookup(contentPath));
+
+          // `_media` is generic for `photo`, `audio`, etc.
+          // It is resolved to the right param internally.
           method({
             chat_id: id,
             _media: content
@@ -72,6 +76,7 @@ var Bub = function (config) {
     };
   }
 
+  // What to do with each update
   function handleUpdates(body) {
     body.result.forEach(function (result) {
       // Convenience method for quick responses
@@ -88,13 +93,14 @@ var Bub = function (config) {
         }
       }
       // TODO: Handle _joinGroup and similar messages
-      // Update offset
+      // Telegram servers can now safely forget older messages
       offset = result.update_id + 1;
     });
     // Check again after handling updates
     self.init();
   }
 
+  // Send a generic HTTPS request
   function sendRequest(params, callback) {
     request.post(params, function (err, res, body) {
       if (err) {
