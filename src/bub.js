@@ -92,7 +92,17 @@ var Bub = function (config) {
           self.emit('_default', result);
         }
       }
-      // TODO: Handle _joinGroup and similar messages
+      if (result.message.new_chat_participant) {
+        var newMember = result.message.new_chat_participant;
+        self.getMe(function (me) {
+          console.log(me);
+          if (me.result.id === newMember.id) {
+            self.emit('_joinGroup', result);
+          } else {
+            self.emit('_newMember', result);
+          }
+        });
+      }
       // Telegram servers can now safely forget older messages
       offset = result.update_id + 1;
     });
