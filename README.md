@@ -59,4 +59,4 @@ bot.init();
 - [x] Add a convenience method `respond()` for quick responses
 - [x] Improve `respond()` to send any kind of message based on the argument
 - [ ] Add webhook support
-- [ ] Somewhere down the road: integrate a proper test framework and manage it with Gulp
+- [ ] Write tests
