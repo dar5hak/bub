@@ -18,6 +18,7 @@
 
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
+require('gulp-npm-test')(gulp);
 
 gulp.task('eslint', function () {
   'use strict';
@@ -27,4 +28,4 @@ gulp.task('eslint', function () {
     .pipe(eslint.failOnError());
 });
 
-gulp.task('default', ['eslint']);
+gulp.task('default', ['eslint', 'test']);
