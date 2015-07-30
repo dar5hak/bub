@@ -49,6 +49,7 @@ var Bub = function (config) {
   // Closure that returns a `respond()` function for each chat_id
   function getRespond(id) {
     return function (content) {
+
       // Strings are text messsages, streams are media
       if (_.isString(content)) {
         self.sendMessage({
@@ -79,6 +80,7 @@ var Bub = function (config) {
   // What to do with each update
   function handleUpdates(body) {
     body.result.forEach(function (result) {
+
       // Convenience method for quick responses
       result.respond = getRespond(result.message.chat.id);
 
@@ -103,9 +105,11 @@ var Bub = function (config) {
           }
         });
       }
+
       // Telegram servers can now safely forget older messages
       offset = result.update_id + 1;
     });
+
     // Check again after handling updates
     self.init();
   }
@@ -124,10 +128,12 @@ var Bub = function (config) {
 
   // Start checking for updates
   self.init = function (update_id) {
+
     // Allow a custom update_id
     if (update_id) {
       offset = update_id;
     }
+
     // If there are updates, handle them
     self.getUpdates({
       offset: offset,
