@@ -21,7 +21,7 @@ var eslint = require('gulp-eslint');
 
 gulp.task('eslint', function () {
   'use strict';
-  return gulp.src(['*.js', 'src/**/*.js'])
+  return gulp.src(['*.js', 'src/**/*.js', 'test/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
