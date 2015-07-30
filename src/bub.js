@@ -26,6 +26,14 @@ var _ = require('lodash');
 // Constructor for the whole darn thing
 var Bub = function (config) {
   'use strict';
+  if (!config) {
+    throw new Error('config is required.');
+  }
+
+  if (!config.token) {
+    throw new Error('`token` is required in config.');
+  }
+
   var BASE_URL = 'https://api.telegram.org/bot' + config.token;
   var TIMEOUT = config.timeout || 864000;
   var offset = null;
