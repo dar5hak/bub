@@ -1,12 +1,12 @@
 {
-  "env": {
-    "mocha": true,
-    "node": true,
-    "jasmine": true
-  },
-  "rules": {
-    "camelcase": 0,
-    "no-underscore-dangle": 0,
-    "quotes": [2, "single"]
-  }
+	"env": {
+		"mocha": true,
+		"node": true,
+		"jasmine": true
+	},
+	"rules": {
+		"camelcase": 0,
+		"no-underscore-dangle": 0,
+		"quotes": [2, "single"]
+	}
 }

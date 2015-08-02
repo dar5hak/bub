@@ -21,11 +21,11 @@ var eslint = require('gulp-eslint');
 require('gulp-npm-test')(gulp);
 
 gulp.task('eslint', function () {
-  'use strict';
-  return gulp.src(['*.js', 'src/**/*.js', 'test/**/*.js'])
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failOnError());
+	'use strict';
+	return gulp.src(['*.js', 'src/**/*.js', 'test/**/*.js'])
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failOnError());
 });
 
 gulp.task('default', ['eslint', 'test']);

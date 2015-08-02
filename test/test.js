@@ -17,49 +17,49 @@
 
 
 describe('Bub', function () {
-  'use strict';
-  var Bub = require('../src/bub');
+	'use strict';
+	var Bub = require('../src/bub');
 
-  it('is a class', function () {
-    expect(typeof Bub).toBe('function');
-  });
+	it('is a class', function () {
+		expect(typeof Bub).toBe('function');
+	});
 
-  it('requires config', function () {
-    try {
-      /*eslint no-new: 0*/
-      new Bub();
-    } catch (err) {
-      expect(err).toMatch(/config is required/);
-    }
-  });
+	it('requires config', function () {
+		try {
+			/*eslint no-new: 0*/
+			new Bub();
+		} catch (err) {
+			expect(err).toMatch(/config is required/);
+		}
+	});
 
-  describe('bot', function () {
-    var config = {
-      token: '80512814:AAFkyYhScAO25wfU9f3zIq-D3W868o-7oTU'
-    };
-    var bot = new Bub(config);
-    var request = require('request');
-    var BASE_URL = 'https://api.telegram.org/bot' + config.token;
+	describe('bot', function () {
+		var config = {
+			token: '80512814:AAFkyYhScAO25wfU9f3zIq-D3W868o-7oTU'
+		};
+		var bot = new Bub(config);
+		var request = require('request');
+		var BASE_URL = 'https://api.telegram.org/bot' + config.token;
 
-    it('is an object', function () {
-      expect(typeof bot).toBe('object');
-    });
+		it('is an object', function () {
+			expect(typeof bot).toBe('object');
+		});
 
-    it('has the right properties', function () {
-      expect(bot.init).toBeDefined();
-    });
+		it('has the right properties', function () {
+			expect(bot.init).toBeDefined();
+		});
 
-    it('emits events', function () {
-      expect(bot.on).toBeDefined();
-    });
+		it('emits events', function () {
+			expect(bot.on).toBeDefined();
+		});
 
-    describe('init', function () {
-      it('checks for updates', function () {
-        bot.init();
-        expect(request.post).toBeCalledWith(jasmine.objectContaining({
-          url: BASE_URL + '/getUpdates'
-        }), jasmine.any(Function));
-      });
-    });
-  });
+		describe('init', function () {
+			it('checks for updates', function () {
+				bot.init();
+				expect(request.post).toBeCalledWith(jasmine.objectContaining({
+					url: BASE_URL + '/getUpdates'
+				}), jasmine.any(Function));
+			});
+		});
+	});
 });
