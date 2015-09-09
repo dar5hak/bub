@@ -21,7 +21,6 @@ var mime = require('mime');
 var path = require('path');
 var request = require('request');
 var util = require('util');
-var _ = require('lodash');
 
 // Constructor for the whole darn thing
 var Bub = function (config) {
@@ -43,11 +42,11 @@ var Bub = function (config) {
 
 	// What API method to use based on the mime type provided
 	function getAPIMethod(mimeType) {
-		if (_.startsWith(mimeType, 'image')) {
+		if (mimeType.startsWith('image')) {
 			return self.sendPhoto;
-		} else if (_.startsWith(mimeType, 'audio')) {
+		} else if (mimeType.startsWith('audio')) {
 			return self.sendAudio;
-		} else if (_.startsWith(mimeType, 'video')) {
+		} else if (mimeType.startsWith('video')) {
 			return self.sendVideo;
 		} else {
 			return self.sendDocument;
@@ -59,7 +58,7 @@ var Bub = function (config) {
 		return function (content) {
 
 			// Strings are text messsages, streams are media
-			if (_.isString(content)) {
+			if (typeof content === 'string') {
 				self.sendMessage({
 					chat_id: id,
 					text: content
