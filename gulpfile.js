@@ -20,7 +20,7 @@ var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 require('gulp-npm-test')(gulp);
 
-gulp.task('eslint', function () {
+gulp.task('eslint', () => {
 	'use strict';
 	return gulp.src(['*.js', 'src/**/*.js', 'test/**/*.js'])
 		.pipe(eslint())

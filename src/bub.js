@@ -86,7 +86,7 @@ var Bub = function (config) {
 
 	// What to do with each update
 	function handleUpdates(body) {
-		body.result.forEach(function (result) {
+		body.result.forEach((result) => {
 
 			// Convenience method for quick responses
 			result.respond = getRespond(result.message.chat.id);
@@ -103,7 +103,7 @@ var Bub = function (config) {
 			}
 			if (result.message.new_chat_participant) {
 				var newMember = result.message.new_chat_participant;
-				self.getMe(function (me) {
+				self.getMe((me) => {
 					console.log(me);
 					if (me.result.id === newMember.id) {
 						self.emit('_joinGroup', result);
@@ -123,7 +123,7 @@ var Bub = function (config) {
 
 	// Send a generic HTTPS request
 	function sendRequest(params, callback) {
-		request.post(params, function (err, res, body) {
+		request.post(params, (err, res, body) => {
 			if (err) {
 				console.error(err);
 			}

@@ -16,15 +16,15 @@
 
 
 
-describe('Bub', function () {
+describe('Bub', () => {
 	'use strict';
 	var Bub = require('../src/bub');
 
-	it('is a class', function () {
+	it('is a class', () => {
 		expect(typeof Bub).toBe('function');
 	});
 
-	it('requires config', function () {
+	it('requires config', () => {
 		try {
 			/*eslint no-new: 0*/
 			new Bub();
@@ -33,7 +33,7 @@ describe('Bub', function () {
 		}
 	});
 
-	describe('bot', function () {
+	describe('bot', () => {
 		var config = {
 			token: '80512814:AAFkyYhScAO25wfU9f3zIq-D3W868o-7oTU'
 		};
@@ -41,20 +41,20 @@ describe('Bub', function () {
 		var request = require('request');
 		var BASE_URL = 'https://api.telegram.org/bot' + config.token;
 
-		it('is an object', function () {
+		it('is an object', () => {
 			expect(typeof bot).toBe('object');
 		});
 
-		it('has the right properties', function () {
+		it('has the right properties', () => {
 			expect(bot.init).toBeDefined();
 		});
 
-		it('emits events', function () {
+		it('emits events', () => {
 			expect(bot.on).toBeDefined();
 		});
 
-		describe('init', function () {
-			it('checks for updates', function () {
+		describe('init', () => {
+			it('checks for updates', () => {
 				bot.init();
 				expect(request.post).toBeCalledWith(jasmine.objectContaining({
 					url: BASE_URL + '/getUpdates'
