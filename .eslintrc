@@ -1,8 +1,7 @@
 {
 	"env": {
-		"mocha": true,
 		"node": true,
-		"jasmine": true
+		"jest": true
 	},
 	"rules": {
 		"camelcase": 0,
