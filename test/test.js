@@ -20,7 +20,7 @@ jest.dontMock('../src/bub');
 
 describe('Bub', () => {
 	'use strict';
-	var Bub = require('../src/bub');
+	const Bub = require('../src/bub');
 
 	it('is a class', () => {
 		expect(typeof Bub).toBe('function');
@@ -36,12 +36,12 @@ describe('Bub', () => {
 	});
 
 	describe('bot', () => {
-		var config = {
+		const config = {
 			token: '80512814:AAFkyYhScAO25wfU9f3zIq-D3W868o-7oTU'
 		};
-		var bot = new Bub(config);
-		var request = require('request');
-		var BASE_URL = 'https://api.telegram.org/bot' + config.token;
+		const bot = new Bub(config);
+		const request = require('request');
+		const BASE_URL = 'https://api.telegram.org/bot' + config.token;
 
 		it('is an object', () => {
 			expect(typeof bot).toBe('object');

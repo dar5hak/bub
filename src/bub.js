@@ -16,14 +16,14 @@
 
 
 
-var isStream = require('is-stream');
-var mime = require('mime');
-var path = require('path');
-var request = require('request');
-var util = require('util');
+const isStream = require('is-stream');
+const mime = require('mime');
+const path = require('path');
+const request = require('request');
+const util = require('util');
 
 // Constructor for the whole darn thing
-var Bub = function (config) {
+let Bub = function (config) {
 	'use strict';
 	if (!config) {
 		throw new Error('config is required.');
@@ -33,12 +33,12 @@ var Bub = function (config) {
 		throw new Error('`token` is required in config.');
 	}
 
-	var BASE_URL = 'https://api.telegram.org/bot' + config.token;
-	var TIMEOUT = config.timeout || 864000;
-	var offset = null;
+	const BASE_URL = 'https://api.telegram.org/bot' + config.token;
+	const TIMEOUT = config.timeout || 864000;
+	let offset = null;
 
 	// A reference to `this`, required for emitting events
-	var self = this;
+	const self = this;
 
 	// What API method to use based on the mime type provided
 	function getAPIMethod(mimeType) {
@@ -66,8 +66,8 @@ var Bub = function (config) {
 				return;
 			} else if (isStream.readable(content)) {
 				if (content.path) {
-					var contentPath = path.resolve(content.path);
-					var method = getAPIMethod(mime.lookup(contentPath));
+					let contentPath = path.resolve(content.path);
+					let method = getAPIMethod(mime.lookup(contentPath));
 
 					// `_media` is generic for `photo`, `audio`, etc.
 					// It is resolved to the right param internally.
@@ -93,8 +93,8 @@ var Bub = function (config) {
 
 			// Handle text messages
 			if (result.message.text) {
-				var command = result.message.text.split(' ')[0];
-				var listeners = util.inspect(self.listeners(command));
+				let command = result.message.text.split(' ')[0];
+				let listeners = util.inspect(self.listeners(command));
 				if (listeners !== '[]') {
 					self.emit(command, result);
 				} else {
@@ -102,7 +102,7 @@ var Bub = function (config) {
 				}
 			}
 			if (result.message.new_chat_participant) {
-				var newMember = result.message.new_chat_participant;
+				let newMember = result.message.new_chat_participant;
 				self.getMe((me) => {
 					console.log(me);
 					if (me.result.id === newMember.id) {
