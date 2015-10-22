@@ -16,6 +16,8 @@
 
 
 
+jest.dontMock('../src/bub');
+
 describe('Bub', () => {
 	'use strict';
 	var Bub = require('../src/bub');
