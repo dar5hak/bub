@@ -25,16 +25,14 @@
   "homepage": "https://github.com/dar5hak/bub#readme",
   "dependencies": {
     "is-stream": "^1.0.1",
-    "jest-cli": "^0.4.18",
-    "lodash": "^3.10.0",
     "mime": "^1.3.4",
-    "request": "^2.58.0"
+    "request": "^2.65.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-eslint": "^0.15.0",
     "gulp-npm-test": "0.0.2",
-    "jest-cli": "^0.4.17",
+    "jest-cli": "^0.5.10",
     "request-debug": "^0.2.0"
   },
   "jest": {

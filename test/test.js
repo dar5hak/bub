@@ -16,15 +16,17 @@
 
 
 
-describe('Bub', function () {
-	'use strict';
-	var Bub = require('../src/bub');
+jest.dontMock('../src/bub');
 
-	it('is a class', function () {
+describe('Bub', () => {
+	'use strict';
+	const Bub = require('../src/bub');
+
+	it('is a class', () => {
 		expect(typeof Bub).toBe('function');
 	});
 
-	it('requires config', function () {
+	it('requires config', () => {
 		try {
 			/*eslint no-new: 0*/
 			new Bub();
@@ -33,28 +35,28 @@ describe('Bub', function () {
 		}
 	});
 
-	describe('bot', function () {
-		var config = {
+	describe('bot', () => {
+		const config = {
 			token: '80512814:AAFkyYhScAO25wfU9f3zIq-D3W868o-7oTU'
 		};
-		var bot = new Bub(config);
-		var request = require('request');
-		var BASE_URL = 'https://api.telegram.org/bot' + config.token;
+		const bot = new Bub(config);
+		const request = require('request');
+		const BASE_URL = 'https://api.telegram.org/bot' + config.token;
 
-		it('is an object', function () {
+		it('is an object', () => {
 			expect(typeof bot).toBe('object');
 		});
 
-		it('has the right properties', function () {
+		it('has the right properties', () => {
 			expect(bot.init).toBeDefined();
 		});
 
-		it('emits events', function () {
+		it('emits events', () => {
 			expect(bot.on).toBeDefined();
 		});
 
-		describe('init', function () {
-			it('checks for updates', function () {
+		describe('init', () => {
+			it('checks for updates', () => {
 				bot.init();
 				expect(request.post).toBeCalledWith(jasmine.objectContaining({
 					url: BASE_URL + '/getUpdates'
