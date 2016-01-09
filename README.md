@@ -1,6 +1,8 @@
 # bub
 Telegram bot framework
 
+> **DEPRECATED:** Use [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api) instead.
+
 Please go through the [Telegram Bot API](https://core.telegram.org/bots/api) first.
 
 ## Get
