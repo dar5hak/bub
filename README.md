@@ -1,4 +1,6 @@
 # bub
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/dar5hak/bub.svg)](https://greenkeeper.io/)
 Telegram bot framework
 
 > **DEPRECATED:** Use [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api) instead.
